@@ -22,7 +22,7 @@ The I2C slave device will be running on the MSP430G2553 using the I2CSlave libra
 * Raspbian on the Raspberry Pi or Arduino IDE
 * MagzorI2C Library, for [Raspberry Pi](https://github.com/Magzorian/MagzorI2C-RaspberryPi/) or for [Arduino](https://github.com/Magzorian/MagzorI2C-Arduino/)
 * [Energia](http://energia.nu/), recommended version: 0101E0016
-* [I2CSlave](http://github.com/Magzorian) library
+* [I2CSlave](https://github.com/Magzorian/I2CSlave) library
 
 ## Hardware Setup
 First things first. Setting up the hardware. Connect your I2C SDA and SCL from the slave to the master. Ensure you have proper pull up resistors and on your I2C SDA and SCL lines.
@@ -30,9 +30,9 @@ Raspberry Pi and MSP430G2553 operate at 3.3V. A pull up on the I2C lines to 3.3V
 Respective pull-ups are also needed.
 
 **Raspberry Pi 2 Hardware Setup**
-![Hello!](https://github.com/Magzorian/I2CSlave/blob/master/Examples/images/arduinouno_setup.png | width 300)
+![Hello!](https://github.com/Magzorian/I2CSlave/blob/master/Examples/images/arduinouno_setup.png | width=300)
 **Arduino Uno Hardware Setup**
-![Hi!](https://raw.githubusercontent.com/Magzorian/I2CSlave/master/Examples/images/arduinouno_setup.png | width 300)
+![Hi!](https://raw.githubusercontent.com/Magzorian/I2CSlave/master/Examples/images/arduinouno_setup.png | width=300)
 
 ## Background
 I2C is a serial communication protocol where an I2C Master controls several I2C slaves. It is a master-slave protocol which means that only the I2C Master can start communication. The I2C Slave cannot directly initiate communication.
@@ -40,7 +40,7 @@ The major advantage of I2C is the addition of slave devices doesn't require any 
 
 ## Software Setup
 * Install MagzorI2C library onto your [Raspberry Pi](https://github.com/Magzorian/MagzorI2C-RaspberryPi) or the [Supported Arduino](https://github.com/Magzorian/MagzorI2C-Arduino).
-* Install the [I2CSlave](https://github.com/Magzorian) onto Energia
+* Install the [I2CSlave](https://github.com/Magzorian/I2CSlave) onto Energia
 	* Extract the I2CSlave.zip contents into your _C:\Users\\**USER_NAME**\Documents\Energia\libraries_ folder.
 
 ## Communciation Protocol

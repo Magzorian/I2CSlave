@@ -30,9 +30,9 @@ Raspberry Pi and MSP430G2553 operate at 3.3V. A pull up on the I2C lines to 3.3V
 Respective pull-ups are also needed.
 
 **Raspberry Pi 2 Hardware Setup**
-![Hello!](https://github.com/Magzorian/I2CSlave/blob/master/Examples/images/arduinouno_setup.png | width=300)
+![Hello!](https://github.com/Magzorian/I2CSlave/blob/master/Examples/images/arduinouno_setup.png =300x)
 **Arduino Uno Hardware Setup**
-![Hi!](https://raw.githubusercontent.com/Magzorian/I2CSlave/master/Examples/images/arduinouno_setup.png | width=300)
+![Hi!](https://raw.githubusercontent.com/Magzorian/I2CSlave/master/Examples/images/arduinouno_setup.png =300x)
 
 ## Background
 I2C is a serial communication protocol where an I2C Master controls several I2C slaves. It is a master-slave protocol which means that only the I2C Master can start communication. The I2C Slave cannot directly initiate communication.

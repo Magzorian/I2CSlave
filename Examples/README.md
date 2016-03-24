@@ -30,7 +30,7 @@ Raspberry Pi and MSP430G2553 operate at 3.3V. A pull up on the I2C lines to 3.3V
 Respective pull-ups are also needed.
 
 **Raspberry Pi 2 Hardware Setup**
-![Hello!](images/arduinouno_setup.png =300x)
+![Hello!](images/raspberrypi2_setup.png =300x)
 **Arduino Uno Hardware Setup**
 ![Hi!](images/arduinouno_setup.png)
 

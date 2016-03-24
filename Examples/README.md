@@ -29,6 +29,8 @@ First things first. Setting up the hardware. Connect your I2C SDA and SCL from t
 Raspberry Pi and MSP430G2553 operate at 3.3V. A pull up on the I2C lines to 3.3V source is required. Arduino and MSP430G2553 operate at 5V and 3.3V respectively and therefore a level shifter is required or the MSP430G2553 can possibly be damaged. 
 Respective pull-ups are also needed.
 
+**IMPORTANT NOTE: REMOVE THE JUMPER ON THE LAUNCHPAD ON THE BOTTOM LEFT OF THE BOARD NEXT TO THE LABEL P1.6 AS THIS JUMPER INTERFERES WITH AN I2C PIN.**
+![Remove that jumper!](images/launchpad_removepin.png)
 **Raspberry Pi 2 Hardware Setup**
 ![Hello!](images/raspberrypi2_setup.png)
 **Arduino Uno Hardware Setup**
@@ -265,6 +267,7 @@ I2C Master will send a command code an an additional 1 byte to I2C slave. (The a
 ``[Command Code Byte = 0x84][Data Byte 0]``
 * **I2C Master <- I2C Slave**  
 ``[Data Byte 0][Data Byte 1][Data Byte 2]``
+
 ### I2C Slave Code
 Copy and paste the code below into a new sketch in Energia. Ensure you target the MSP430G2553. Press upload to upload the firmware to the microcontroller.
 ```

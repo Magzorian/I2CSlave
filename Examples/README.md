@@ -30,7 +30,7 @@ Raspberry Pi and MSP430G2553 operate at 3.3V. A pull up on the I2C lines to 3.3V
 Respective pull-ups are also needed.
 
 **IMPORTANT NOTE: REMOVE THE JUMPER ON THE LAUNCHPAD ON THE BOTTOM LEFT OF THE BOARD NEXT TO THE LABEL P1.6 AS THIS JUMPER INTERFERES WITH AN I2C PIN.**
-![Remove that jumper!](images/launchpad_removepin.png)
+![Remove that jumper!](images/launchpad_removepin.png)  
 **Raspberry Pi 2 Hardware Setup**
 ![Hello!](images/raspberrypi2_setup.png)
 **Arduino Uno Hardware Setup**

@@ -17,6 +17,7 @@ The I2C slave device will be running on the MSP430G2553 using the I2CSlave libra
     * Additional 2x 10kOhm Pull Up Resistors
     * 1x 200kOhm Pull Up Resistor
     * Level Shifter - PCA9306
+
 #### Software
 * Raspbian on the Raspberry Pi or Arduino IDE
 * MagzorI2C Library, for [Raspberry Pi](https://github.com/Magzorian/MagzorI2C-RaspberryPi/) or for [Arduino](https://github.com/Magzorian/MagzorI2C-Arduino/)
@@ -28,7 +29,10 @@ First things first. Setting up the hardware. Connect your I2C SDA and SCL from t
 Raspberry Pi and MSP430G2553 operate at 3.3V. A pull up on the I2C lines to 3.3V source is required. Arduino and MSP430G2553 operate at 5V and 3.3V respectively and therefore a level shifter is required or the MSP430G2553 can possibly be damaged. 
 Respective pull-ups are also needed.
 
-[images]
+**Raspberry Pi 2 Hardware Setup**
+![Hello!](https://github.com/Magzorian/I2CSlave/blob/master/Examples/images/arduinouno_setup.png | width 300)
+**Arduino Uno Hardware Setup**
+![Hi!](https://raw.githubusercontent.com/Magzorian/I2CSlave/master/Examples/images/arduinouno_setup.png | width 300)
 
 ## Background
 I2C is a serial communication protocol where an I2C Master controls several I2C slaves. It is a master-slave protocol which means that only the I2C Master can start communication. The I2C Slave cannot directly initiate communication.

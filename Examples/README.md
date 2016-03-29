@@ -819,5 +819,5 @@ void loop() {
 	delay(10000);
 }
 ```
-**sketch.ino**  
+**Upload and Run**  
 Hit upload. Once upload is complete open serial port to view output.

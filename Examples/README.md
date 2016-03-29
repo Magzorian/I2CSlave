@@ -5,6 +5,7 @@
 
 This tutorial will cover how to write your own I2C slave device using the I2CSlave library and control it by defining the I2C device on your I2C master using the MagzorI2C library.
 The I2C slave device will be running on the MSP430G2553 using the I2CSlave library for Energia. Energia is an Arduino-like IDE for the MSP430 and other TI Launchpads.
+The example files are available for download [here](https://github.com/Magzorian/I2CSlave/tree/master/Examples).
 
 ## Requirements
 #### Hardware
@@ -35,6 +36,8 @@ Respective pull-ups are also needed.
 ![Hello!](images/raspberrypi2_setup.png)
 **Arduino Uno Hardware Setup**
 ![Hi!](images/arduinouno_setup.png)
+**Arduino Mega Hardware Setup**
+![Hey!](images/arduinomega_setup.png)
 
 ## Background
 I2C is a serial communication protocol where an I2C Master controls several I2C slaves. It is a master-slave protocol which means that only the I2C Master can start communication. The I2C Slave cannot directly initiate communication.
@@ -593,9 +596,228 @@ int main(int argc, char** argv) {
 **Run Command**:  
 ``sudo ./a.out``
 
-### I2C Master Code for Arduino Uno
+### I2C Master Code for Arduino Uno and Arduino Mega
 **My_I2CDevice.h**
+```
+#ifndef MY_I2CDEVICE_H
+#define MY_I2CDEVICE_H
 
+#include <AbstractI2CDevice.h>
+#include <stdint.h>
+
+class My_I2CDevice : public AbstractI2CDevice {
+private:
+    void initDevice();
+
+protected:
+
+public:
+
+    My_I2CDevice() : AbstractI2CDevice() {
+        initDevice();
+    };
+
+    My_I2CDevice(uint8_t i2c_address) : AbstractI2CDevice(i2c_address) {
+        initDevice();
+    };
+
+    void function1();
+    void function2(uint8_t data0, uint8_t data1, uint8_t data2);
+    uint8_t function3();
+    unsigned int function4(uint8_t data0);
+};
+
+#endif
+```
 **My_I2CDevice.cpp**
+```
+#include "My_I2CDevice.h"
 
-**sketch.cpp**
+//Generic constructor for this device
+void My_I2CDevice::initDevice(){
+     
+}
+
+void My_I2CDevice::function1() {
+    //Command code for our first function.
+    uint8_t command_code_function1 = 0x81;
+
+    //Create the array to pass to the write function.
+    uint8_t w[1];
+
+    //Populate the  write array. Index 0 is always the command code.
+    w[0] = command_code_function1;
+
+    //Call the write function. We pass it the array and the number of bytes.
+    this->write(w, 1);
+}
+
+void My_I2CDevice::function2(uint8_t data0, uint8_t data1, uint8_t data2) {
+    //Command code for our second function.
+    uint8_t command_code_function2 = 0x82;
+
+    //Create the array to pass to the write function.
+    uint8_t w[4];
+
+    //Populate the array. Index 0 is always the command code. Follow by additional data.
+    w[0] = command_code_function2;
+    w[1] = data0;
+    w[2] = data1;
+    w[3] = data2;
+
+    //Call the write function. We pass it the array and the number of bytes.
+    this->write(w, 4);
+}
+
+uint8_t My_I2CDevice::function3() {
+    //Command code for our third function
+    uint8_t command_code_function3 = 0x83;
+
+    //Create the arrays to pass to the write read function
+    uint8_t w[1];
+    uint8_t r[1];
+
+    //Populate the  write array. Index 0 is always the command code.
+    w[0] = command_code_function3;
+
+    //Call the write read function. We pass it the arrays and the number of bytes to write and read.
+    //We also have a very short delay (10us) between the write and read operations to allow the device to prepare its data.
+    this->write_read(w, 1, r, 1, 10);
+
+    //Return the read byte from the I2C device
+    return r[0];
+}
+
+unsigned int My_I2CDevice::function4(uint8_t data0) {
+    //Command code for the fourth function
+    uint8_t command_code_function4 = 0x84;
+
+    //Create the arrays to pass the write read function
+    uint8_t w[2];
+    uint8_t r[3];
+
+    //Populate the array. Index 0 is always the command code. Follow by additional data.
+    w[0] = command_code_function4;
+    w[1] = data0;
+
+    //Call the write read function. We pass it the arrays and the number of bytes to write and read.
+    //We also have a very short delay (10us) between the write and read operations to allow the device to prepare its data.
+    this->write_read(w, 2, r, 3, 10);
+
+    //Return the sum of all read the bytes
+    unsigned int ret_val = 0;
+    ret_val += r[0];
+    ret_val += r[1];
+    ret_val += r[2];
+
+    return ret_val;
+}
+```
+**sketch.ino**
+```
+#include <Wire.h>
+#include <MagzorI2C.h>
+
+#include "My_I2CDevice.h"
+
+//Address for the board
+static const uint8_t MY_BOARD_I2C_ADDRESS = 0x04;
+
+//My_I2CDevice object
+My_I2CDevice my_i2cdevice0(MY_BOARD_I2C_ADDRESS);
+
+uint8_t reset_pin = 0;
+uint8_t interrupt_pin = 2;
+
+
+void setup() {
+	//Wait for MICs to initialize
+	delay(1500);
+
+	//Initialize I2C library
+	Wire.begin();
+
+	//Start serial output
+	Serial.begin(9600);
+
+	//register reset and interrupt pin
+	MagzorI2C::setup(reset_pin, interrupt_pin);
+	//Enable I2C communication print out. Comment this out if you don't wish to see it.
+	//MLogger::set_all_enabled();
+
+	//Seeding the random number generator for function2 parameters
+	randomSeed( analogRead(0) );
+
+
+
+}
+
+void loop() {
+	//Call our first function which just sends the command code to the I2C Slave device
+	my_i2cdevice0.function1();
+	Serial.print("Turning on LED connected to P1.0 on the MSP430G2 Launchpad.\n");
+
+	//Delay 5 seconds so we can see the LED on before we run the next command
+	Serial.print("Delaying 5 seconds before running the next command...\n");
+	delay(5000);
+
+	//Call our second function which sends the command code and an additional 3 bytes of data to the I2C Slave device
+	//Generate 3 random numbers
+	uint8_t random1 = random(0, 255);
+	uint8_t random2 = random(0, 255);
+	uint8_t random3 = random(0, 255);
+
+	//Call function2
+	my_i2cdevice0.function2(random1, random2, random3);
+
+	Serial.print("Your 3 random numbers for function2 are: ");
+	Serial.print(random1, DEC);
+	Serial.print(" ");
+	Serial.print(random2, DEC);
+	Serial.print(" ");
+	Serial.print(random3, DEC);
+	Serial.print("\n");
+
+	unsigned int total_sum = random1 + random2 + random3;
+	Serial.print("The sum is ");
+	Serial.print(total_sum, DEC);
+	Serial.print(".\n");
+
+	//Check if the result is even, which means the LED would be turned off
+	if ((random1 % 2) == 0) {
+		Serial.print("Random1 is ");
+		Serial.print(random1, DEC);
+		Serial.print(" which is even and the LED will be turned off.\n");
+	}
+	//Not even, so LED was not turned off
+	else {
+		Serial.print("Random1 is ");
+		Serial.print(random1, DEC);
+		Serial.print(" which is odd and the LED will be left on.\n");
+	}
+
+	//Call our third function which sends the command code and requests back 1 byte of data from the I2C Slave device
+	unsigned int func3_calltimes = my_i2cdevice0.function3();
+	Serial.print("Function 3 was called ");
+	Serial.print(func3_calltimes, DEC);
+	Serial.print(" times since the I2C Slave device has started up.\n");
+
+
+	//Call our fourth function which sends the command code and 1 additional byte of data to the I2C Slave device
+	//then requests 3 bytes of data from the I2C Slave device
+	//the function then adds those 3 bytes of data and returns that value
+	unsigned int returned_total_sum = my_i2cdevice0.function4(0);
+	Serial.print("Function 4 has returned a total sum of ");
+	Serial.print(returned_total_sum, DEC);
+	Serial.print(" which should be the same number as above.\n");
+
+	//delay 1 second to finish printing stuff from MLogger
+	delay(1000);
+
+	//delay 10 seconds before repeating loop
+	Serial.print("***Delaying 10 seconds before running loop again\n\n\n\n\n");
+	delay(10000);
+}
+```
+**sketch.ino**  
+Hit upload. Once upload is complete open serial port to view output.

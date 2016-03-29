@@ -77,7 +77,7 @@ The purpose of this is that we first write to the I2C Slave and then the I2C Sla
 The I2CSlave library is designed to aid in configuring your I2C Slave device. It encapsulates the communication layer. Thus, you will primary focus on the behavior of your I2C Slave device.
 
 The two functions you will use are:
-```
+```c++
 int init(uint8_t slave_address);
 ```
 ##### Description
@@ -87,7 +87,7 @@ Initiates the library with the passed in slave address.
 ##### Returns
 1: Successfully initialized this library  
 -1: Slave address out of range. Failed to initialize.
-```
+```c++
 int register_command_code(uint8_t command_code, cc_func func, bool enable_CRC, uint8_t read_size = 0, uint8_t write_size = 0);
 ```
 ##### Description
@@ -127,7 +127,7 @@ The MagzorI2C library is designed to aid in confguring your I2C Master to commun
 
 You will have to inherit from an Abstract class which will be the basis for your I2C Slave device definition. To learn more about class inhertiance and Abstract classes check out this [tutorial](http://www.cplusplus.com/doc/tutorial/inheritance/). You can also directly access the ``write`` and ``read`` I2C functions from **I2C_Interface** class.  
 Once you have inherited from the AbstractI2CDevice, you will have access to I2C communication functions:
-```	
+```c++	
 int write(uint8_t* w, uint8_t w_size);
 ```
 ##### Description
@@ -138,7 +138,7 @@ This function writes a number of bytes from an array to the I2C Address defined 
 ##### Returns
 Number of bytes written
 
-```		
+```c++		
 int read(uint8_t* r, uint8_t r_size);
 ```
 ##### Description
@@ -148,7 +148,7 @@ This function reads a number of bytes from the I2C Address defined in the constr
 **r_size**: the number of bytes to request from the I2C Slave which will be stored in **r**.
 ##### Returns
 Number of bytes read
-```
+```c++
 int write_read(uint8_t* w, uint8_t w_size, uint8_t* r, uint8_t r_size, uint16_t microsecond_wr_delay = 0);
 ```
 ##### Description
@@ -184,17 +184,17 @@ An example below will show how to set up both I2C Slave and I2C Master.
 		
 For your class on your I2C Master you want to define functions that will use the ``write`` and ``read`` fuctions to communicate with your I2C Slave device. You will have to come up with the command code (**don't reuse multiple times**) and if any additional data you wish to send. In the corresponding end on the I2C Slave side. The I2C Slave will read in the command code and any additional data you send and look for which function it will call based on your configuration.  
 Your function, when called can do whatever it wishes to and it can access the additional data from the array that is passed to it as a function parameter ( **data_read** ). Your function can return data by modifying the array that is passed to it as a function parameter ( **data_write** ).  
-There are limitations to the **data_write** and **data_read** arrays. They are not unlimited in size. **They are 16 bytes in size each**. The table below shows the usable bytes of the arrays in different modes.
+There are limitations to the **data_write** and **data_read** arrays. They are not unlimited in size. **They are 16 bytes in size each**. The table below shows the usable bytes of the arrays in different modes.  
 
-| Array | Size of Array | Used Bytes (without CRC) | Usable Bytes (without CRC)
-|:-|:-|:-|:-
-| data_read  | 16 | 1 (Command Code) | 15     
-| data_write | 16| 0 | 16  
+| Array | Size of Array | Used Bytes (without CRC) | Usable Bytes (without CRC) |
+|---|---|---|---|
+| data_read  | 16 | 1 (Command Code) | 15 |    
+| data_write | 16| 0 | 16 |
 
-| Array | Size of Array | Used Bytes (with CRC) | Usable Bytes (with CRC)
-|:-|:-|:-|:-
-| data_read  | 16 | 1 (Command Code) + 2 (CRC) | 13     
-| data_write | 16 | 2 (CRC read) + 2 (CRC write) | 14  
+| Array | Size of Array | Used Bytes (with CRC) | Usable Bytes (with CRC) |
+|---|---|---|---|
+| data_read  | 16 | 1 (Command Code) + 2 (CRC) | 13  |   
+| data_write | 16 | 2 (CRC read) + 2 (CRC write) | 14 | 
 
 **Note:** This guide just covers "without CRC."
 
@@ -273,7 +273,7 @@ I2C Master will send a command code an an additional 1 byte to I2C slave. (The a
 
 ### I2C Slave Code
 Copy and paste the code below into a new sketch in Energia. Ensure you target the MSP430G2553. Press upload to upload the firmware to the microcontroller.
-```
+```c++
 #include <Wire.h>
 #include <stdint.h>
 #include <I2C_Packet_Handler.h>
@@ -383,7 +383,7 @@ void function4(unsigned char* data_read, unsigned char* data_write){
 ```
 ### I2C Master Code for Raspberry Pi
 **My_I2CDevice.h**
-```
+```c++
 //File: My_I2CDevice.h
 #ifndef MY_I2CDEVICE_H
 #define MY_I2CDEVICE_H
@@ -416,7 +416,7 @@ public:
 #endif
 ```
 **My_I2CDevice.cpp**
-```
+```c++
 //File: My_I2CDevice.cpp
 #include "My_I2CDevice.h"
 
@@ -501,7 +501,7 @@ unsigned int My_I2CDevice::function4(uint8_t data0) {
 }
 ```
 **main.cpp**
-```
+```c++
 //File: main.cpp
 #include <iostream>
 #include <stdlib.h> 
@@ -598,7 +598,7 @@ int main(int argc, char** argv) {
 
 ### I2C Master Code for Arduino Uno and Arduino Mega
 **My_I2CDevice.h**
-```
+```c++
 #ifndef MY_I2CDEVICE_H
 #define MY_I2CDEVICE_H
 
@@ -630,7 +630,7 @@ public:
 #endif
 ```
 **My_I2CDevice.cpp**
-```
+```c++
 #include "My_I2CDevice.h"
 
 //Generic constructor for this device
@@ -714,7 +714,7 @@ unsigned int My_I2CDevice::function4(uint8_t data0) {
 }
 ```
 **sketch.ino**
-```
+```c++
 #include <Wire.h>
 #include <MagzorI2C.h>
 
